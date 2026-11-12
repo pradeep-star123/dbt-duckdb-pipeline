@@ -1,0 +1,69 @@
+
+models:
+  - name: job_postings
+    description: cleaned postings
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: job_id
+        description: unique identifier of the job posting
+      - name: job_title
+        description: title of the job posting
+      - name: company_name
+        description: name of the hiring company
+      - name: job_location
+        description: location of the job
+      - name: job_via
+        description: platform or site the job was posted through
+      - name: job_schedule_type
+        description: schedule type of the job (e.g. full-time, contract)
+      - name: job_work_from_home
+        description: whether the job allows working from home
+      - name: search_date
+        description: date the search was run
+      - name: search_term
+        description: search term (role) used to find the posting
+
+  - name: job_per_month
+    description: number of job postings per month and role
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: month
+        description: month of the search date (truncated to first day of month)
+      - name: role
+        description: search term (role) the postings were found with
+      - name: postings
+        description: count of postings for the month and role
+
+  - name: top_locations
+    description: number of job postings per location, ordered from most to fewest
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: job_location
+        description: location of the job
+      - name: postings
+        description: count of postings in the location
+
+  - name: monthly_summary
+    description: monthly total postings and share of remote (work from home) postings
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: month
+        description: month of the search date (truncated to first day of month)
+      - name: total_postings
+        description: total postings across all roles for the month
+      - name: remote_postings
+        description: number of postings for the month that allow working from home
+      - name: pct_remote
+        description: percentage of the month's postings that are remote, rounded to one decimal

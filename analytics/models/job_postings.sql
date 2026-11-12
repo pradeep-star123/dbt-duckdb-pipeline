@@ -1,3 +1,4 @@
+{{config(materialized='ephemeral')}}
 select
 	job_id,
 	job_title,
@@ -8,5 +9,5 @@ select
 	job_work_from_home,
 	search_date,
 	search_term
-from '../data/raw/raw_job_postings_*.parquet'
+from {{ source('raw','job_postings')}}
 where error  is null
