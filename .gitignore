@@ -13,3 +13,5 @@ wheels/
 data/
 *.duckdb
 logs/
+
+.user.yml
