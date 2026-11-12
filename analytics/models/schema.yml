@@ -11,6 +11,8 @@ models:
         description: unique identifier of the job posting
       - name: job_title
         description: title of the job posting
+        data_tests:
+          - not_null
       - name: company_name
         description: name of the hiring company
       - name: job_location
