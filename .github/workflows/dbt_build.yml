@@ -1,0 +1,30 @@
+# Monorepo adaptation of project_1's workflow (students run the copy in
+# project_1/.github/ from their own repo root). Same steps, same zero-secrets
+# design — only the working directories differ.
+name: dbt build & publish
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: '17 6 * * 1'    # Mondays — the pipeline runs while you sleep
+  workflow_dispatch:        # …and a manual Run button
+permissions:
+  contents: write           # lets the workflow update the release
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: uv run python scripts/download_data.py
+      - run: uv run dbt build --profiles-dir ../ci
+        working-directory: analytics
+      # Monorepo-only (not in the student copy): store job_postings as a table in
+      # the published warehouse, so a remote ATTACH can query it. The model stays
+      # a view in the course code. duckdb pinned to the version this was tested on.
+      - run: |
+          gh release create warehouse --notes "Warehouse — auto-built by dbt" || true
+          gh release upload warehouse data/prod.duckdb --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
